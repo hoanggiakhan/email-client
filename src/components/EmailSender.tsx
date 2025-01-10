@@ -16,7 +16,7 @@ const EmailSender: React.FC = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        axios.post('http://localhost:8080/api/email/send', emailData)
+        axios.post('https://email-server-1-urlx.onrender.com', emailData)
             .then(response => {
                 alert(response.data);
                 // Reset the form fields
