@@ -10,20 +10,27 @@ const EmailSender: React.FC = () => {
         body: ''
     });
 
+    const [loading, setLoading] = useState(false);
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setEmailData({ ...emailData, [e.target.name]: e.target.value });
     };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        axios.post('https://email-server-1-urlx.onrender.com', emailData)
+        setLoading(true);
+        axios.post('https://email-server-1-urlx.onrender.com/api/email/send', emailData)
             .then(response => {
                 alert(response.data);
                 // Reset the form fields
                 setEmailData({ to: '', subject: '', body: '' });
             })
             .catch(error => {
-                console.error('There was an error sending the email!', error);
+                alert('There was an error sending the email!');
+                console.error('Error:', error);
+            })
+            .finally(() => {
+                setLoading(false);
             });
     };
 
@@ -67,7 +74,9 @@ const EmailSender: React.FC = () => {
                         required
                     />
                 </div>
-                <button type="submit" className="btn btn-primary btn-block mt-3">Send Email</button>
+                <button type="submit" className="btn btn-primary btn-block mt-3" disabled={loading}>
+                    {loading ? 'Sending...' : 'Send Email'}
+                </button>
             </form>
         </div>
     );
